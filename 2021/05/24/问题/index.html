@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>问题记录 | wuyp&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="weblogicJava报错 weblogic：Servlet failed with Exception 最近在发布的项目发现：weblogic报Internal Server Error-500错误，看到出错信息为Servlet failed with Exception   java.lang.NullPointerException，毫无疑问，导致出现这种问题的原因在于NullPointe">
+<meta property="og:type" content="article">
+<meta property="og:title" content="问题记录">
+<meta property="og:url" content="http://example.com/2021/05/24/%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="wuyp&#39;s blog">
+<meta property="og:description" content="weblogicJava报错 weblogic：Servlet failed with Exception 最近在发布的项目发现：weblogic报Internal Server Error-500错误，看到出错信息为Servlet failed with Exception   java.lang.NullPointerException，毫无疑问，导致出现这种问题的原因在于NullPointe">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-05-24T14:33:13.983Z">
+<meta property="article:modified_time" content="2021-05-24T14:33:13.989Z">
+<meta property="article:author" content="wuyp">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="wuyp&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,700&amp;subset=korean" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <!--<div id="banner"></div>-->
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <a href="/" id="main-nav-title" class="main-nav-link">wuyp&#39;s blog</a>
+        <div class="header_menu">
+          
+            <a class="main-nav-link" href="/">主页</a>
+          
+            <a class="main-nav-link" href="/archives/">归档</a>
+          
+            <a class="main-nav-link" href="/about/">关于.</a>
+          
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-问题" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      问题记录
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      <div class="article-entry-part">
+        
+          <h1 id="weblogic"><a href="#weblogic" class="headerlink" title="weblogic"></a>weblogic</h1><h2 id="Java报错"><a href="#Java报错" class="headerlink" title="Java报错"></a>Java报错</h2><ul>
+<li><p>weblogic：Servlet failed with Exception</p>
+<p>最近在发布的项目发现：weblogic报Internal Server Error-500错误，看到出错信息为Servlet failed with Exception   java.lang.NullPointerException，毫无疑问，导致出现这种问题的原因在于NullPointerException（空指针异常），也就是说【代码中出现了为空】的对象，并不是weblogic部署出现的问题。</p>
+<p>接下来看看日志信息，涉及哪个Action的方法中出现了空指针，这需要你逐句去调试。找到空指针问题也就差不多解决了。</p>
+<p>PS：莫名出现java.net.SocketException: Write failed: Broken pipe也可能是上述原因造成的。当然真正的问题还得具体对待。</p>
+</li>
+</ul>
+<h2 id="配置数据源"><a href="#配置数据源" class="headerlink" title="配置数据源"></a>配置数据源</h2><ul>
+<li>ORA-12505, TNS:listener does not currently know of SID given in connect descriptor</li>
+</ul>
+<p>ORA-12505: TNS: 监听程序当前无法识别连接描述符中所给出的SID</p>
+<p>1】给程序配置新的数据库的时候，出现了以下错误 </p>
+<p>ORA-12505, TNS:listener does not currently know of SID given in connect descriptor<br>说明给到的sid有误,很有可能就是服务名和sid混淆使用。</p>
+<p>首先了解数据库url的写法有两种</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">//</span> <span class="string">监听sid服务，表示sid为CORETEST</span></span><br><span class="line"><span class="meta">database.url</span>=<span class="string">jdbc:oracle:thin:@10.13.1.xx:1521:CORETEST</span></span><br><span class="line"><span class="meta">//</span> <span class="string">监听服务名，表示服务名为CORETEST</span></span><br><span class="line"><span class="meta">database.url</span>=<span class="string">jdbc:oracle:thin:@10.13.1.xx:1521/CORETEST</span></span><br><span class="line"><span class="meta">//</span> <span class="string">第一种是监听sid服务，第二种则是监听服务名</span></span><br></pre></td></tr></table></figure>
+
+<p>问题】把服务名当做了sid，导致出现这个错误</p>
+<p>解决】把orcl的 “ : ” 改为 “ / ”  访问正常</p>
+<p>补充】提供的tnsname</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">TEST</span> =<span class="string"></span></span><br><span class="line">  <span class="meta">(DESCRIPTION</span> =<span class="string"></span></span><br><span class="line">    <span class="meta">(ADDRESS_LIST</span> =<span class="string"></span></span><br><span class="line">      <span class="meta">(ADDRESS</span> = <span class="string">(PROTOCOL = TCP)(HOST = 10.13.1.xx)(PORT = 1521))</span></span><br><span class="line">    <span class="attr">)</span></span><br><span class="line">    <span class="meta">(CONNECT_DATA</span> =<span class="string"></span></span><br><span class="line">      <span class="meta">(SERVICE_NAME</span> = <span class="string">CORETEST)</span></span><br><span class="line">    <span class="attr">)</span></span><br><span class="line">  <span class="attr">)</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="weblogic版本导致的问题"><a href="#weblogic版本导致的问题" class="headerlink" title="weblogic版本导致的问题"></a>weblogic版本导致的问题</h2><ul>
+<li>weblogic 10 及以后版本引用 weblogic.jar</li>
+</ul>
+<p>weblogic10 及以后的版本，不能直接使用server/lib 目录下的 weblogic.jar 了，需要通过执行一个命令生成手动生成 wlfullclient.jar，用来替代老版本中的 weblogic.jar。</p>
+<pre><code>具体命令如下（Windows 系统，我的 weblogic 安装目录为C:\Oracle\Middleware\wlserver_10.3）：
+</code></pre>
+<p>C:<br>cd C:\Oracle\Middleware\wlserver_10.3\server\lib<br>java -jar C:\Oracle\Middleware\wlserver_10.3\server\lib\modules\com.bea.core.jarbuilder_1.7.0.0.jar</p>
+<pre><code>执行完成后，会在控制台看到类似于如下的输出信息
+</code></pre>
+<p>xxx<br>Created new jar file: <strong>D:\Program\weblogic-10.3.6\wlserver\server\lib\wlfullclient.jar</strong></p>
+<p>最后一行是生成的 wlfullclient.jar 就是我们需要引用的 jar 包了</p>
+<h1 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h1><h2 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h2><ul>
+<li><p>JavaScript 本地对象和内置对象</p>
+</li>
+<li><p>Browser 对象(DOM)</p>
+<ul>
+<li><table>
+<thead>
+<tr>
+<th><a target="_blank" rel="noopener" href="https://www.w3school.com.cn/jsref/prop_win_top.asp">top</a></th>
+<th>返回最顶层的先辈窗口</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td><a target="_blank" rel="noopener" href="https://www.w3school.com.cn/htmldom/prop_win_top.asp">https://www.w3school.com.cn/htmldom/prop_win_top.asp</a></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+<li><p>HTML DOM对象</p>
+</li>
+</ul>
+<p>1、FF中不能接受document.forms(“formname”)的使用，ie中可以</p>
+<pre><code>    最好改成document.forms[&quot;formname&quot;]的下标用法
+</code></pre>
+<p>2、FF中不能接受document.all的用法，document.all是在ie中定义的用法</p>
+<pre><code>    最好改成document.getElementById
+</code></pre>
+<p>3、FF中不能直接使用div的id获取div的属性，如divId.style.display等</p>
+<pre><code>    应一致改成document.getElementById(&quot;divId&quot;).style.display
+</code></pre>
+<p>JavaScript的一些用法总结：</p>
+<p>如下的用法需要在JSP中增加属性onclick. 以全选为例，οnclick=”javascript:allselect()”//javascript可以省略</p>
+<p>或者将function allselect()用document.getElementById(“allselectbox”).onclick = function();</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line">全选：</span><br><span class="line"></span><br><span class="line">fuction <span class="function"><span class="title">allselect</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"> <span class="keyword">var</span> form = <span class="built_in">document</span>.forms[<span class="number">0</span>];</span><br><span class="line"> <span class="keyword">var</span> state = form.allselectbox.checked;</span><br><span class="line"> <span class="keyword">var</span> length = form.username.length;</span><br><span class="line"> <span class="keyword">if</span>(length)&#123;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;length;i++)&#123;</span><br><span class="line">   form.usernames[i].checked=state;</span><br><span class="line">  &#125;</span><br><span class="line"> &#125;<span class="keyword">else</span> form.username.check = state;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">全选的另一种写法：</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">allSelect</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> items = <span class="built_in">document</span>.getElementsByName(<span class="string">&quot;usernames&quot;</span>);</span><br><span class="line">  <span class="keyword">var</span> state = <span class="built_in">document</span>.getElementsByName(<span class="string">&quot;allselectbox&quot;</span>)[<span class="number">0</span>].checked;</span><br><span class="line">  <span class="keyword">if</span>(items.length)&#123;</span><br><span class="line">   <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; items.length; i++)&#123;</span><br><span class="line">    items[i].checked = state;</span><br><span class="line">   &#125;</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">   items.checked = state;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">单项选择：</span><br><span class="line">fuction <span class="function"><span class="title">selectitem</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"> <span class="keyword">var</span> form = <span class="built_in">document</span>.forms[<span class="number">0</span>];</span><br><span class="line"> <span class="keyword">var</span> length = form.username.length;</span><br><span class="line"> <span class="keyword">if</span>(length)&#123;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;length;i++)&#123;</span><br><span class="line">   <span class="keyword">if</span>(form.usernames[i].checked) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line"> &#125;<span class="keyword">else</span> <span class="keyword">return</span> form.usernames.check;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">转到其他页面：</span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">function</span> <span class="title">topage</span>(<span class="params">page</span>)</span>&#123;</span><br><span class="line"> <span class="keyword">var</span> form = <span class="built_in">document</span>.forms[<span class="number">0</span>]</span><br><span class="line"> form.page.value = page;</span><br><span class="line"> form.submit;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">取单选框的值Radio:</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getradiovalue</span>(<span class="params">objradio</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> result = <span class="string">&quot;&quot;</span>;</span><br><span class="line">  <span class="keyword">try</span>&#123;</span><br><span class="line">   <span class="keyword">if</span>(<span class="keyword">typeof</span>(objradio.value)==<span class="string">&quot;undefined&quot;</span>)&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;objradio.length;i++)&#123;</span><br><span class="line">     <span class="keyword">if</span>(objradio[i].checked)&#123;</span><br><span class="line">      <span class="keyword">return</span> objradio[i].value;</span><br><span class="line">     &#125;</span><br><span class="line">    &#125;</span><br><span class="line">   &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(objradio.checked) result = objradio.value;</span><br><span class="line">   &#125;</span><br><span class="line">  &#125;<span class="keyword">catch</span>(e)&#123;result = <span class="string">&quot;&quot;</span>;&#125;</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line">email验证:</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isValidEmail</span>(<span class="params">inEmail</span>)</span>&#123;</span><br><span class="line"> <span class="keyword">var</span> filter = <span class="regexp">/^([a-zA-Z0-9_/./-])+/</span>@(([a-zA-Z0-<span class="number">9</span>/-])+<span class="regexp">/.)+([a-zA-Z0-9]&#123;2,4&#125;)+$/</span>;</span><br><span class="line"> <span class="keyword">return</span> filter.test(inEmail);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">检验手机格式：</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">validateMobile</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> form = <span class="built_in">document</span>.forms[<span class="number">0</span>];</span><br><span class="line">  <span class="keyword">if</span>(form.mobile.value!=<span class="string">&quot;&quot;</span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> num = <span class="regexp">/^1[35]/</span>d&#123;<span class="number">9</span>&#125;$/</span><br><span class="line">   <span class="keyword">if</span>(!num.test(form.mobile.value))&#123;</span><br><span class="line">    alert(<span class="string">&quot;收货人的手机号格式不正确&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">   &#125;</span><br><span class="line">   alert(<span class="string">&quot;正确&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">request.getParameter(<span class="string">&quot;action&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="idea"><a href="#idea" class="headerlink" title="idea"></a>idea</h1><ul>
+<li>控制台输出日志乱码</li>
+</ul>
+<p>问题】更改日志配置文件</p>
+<p>1、tomcat安装包 - conf文件夹 - logging.properties文件 - UTF-8改成GBK</p>
+<p>Ctrl+F 全部替换-重启IDEA运行</p>
+<h2 id="web前端框架"><a href="#web前端框架" class="headerlink" title="web前端框架"></a>web前端框架</h2><ul>
+<li>bootstrap</li>
+</ul>
+<ul>
+<li></li>
+</ul>
+<h2 id="分布式-多线程-高并发"><a href="#分布式-多线程-高并发" class="headerlink" title="分布式 多线程 高并发"></a>分布式 多线程 高并发</h2>
+        
+      </div>
+      
+      <aside id="article-toc" role="navigation" class="fixed" >
+    <div id="article-toc-inner">
+        <strong class="sidebar-title">文章目录</strong>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#weblogic"><span class="toc-text">weblogic</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java%E6%8A%A5%E9%94%99"><span class="toc-text">Java报错</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%95%B0%E6%8D%AE%E6%BA%90"><span class="toc-text">配置数据源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#weblogic%E7%89%88%E6%9C%AC%E5%AF%BC%E8%87%B4%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">weblogic版本导致的问题</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTML"><span class="toc-text">HTML</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1"><span class="toc-text">对象</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#idea"><span class="toc-text">idea</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#web%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6"><span class="toc-text">web前端框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F-%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E9%AB%98%E5%B9%B6%E5%8F%91"><span class="toc-text">分布式 多线程 高并发</span></a></li></ol></li></ol>
+    </div>
+</aside>
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/05/24/%E9%97%AE%E9%A2%98/" data-id="ckp2pq759000111gp0vjmerhn" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/05/24/%E6%AF%8F%E6%97%A5%E8%AE%B0%E5%BD%95/" id="article-nav-newer" class="article-nav-link-wrap">
+      <span class="article-nav-caption">Newer</span>
+      <div class="article-nav-title">
+        
+          每日记录
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/05/24/%E4%BF%9D%E9%99%A9%E8%A1%8C%E4%B8%9A/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-caption">Older</span>
+      <div class="article-nav-title">保险行业</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 wuyp<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> with 
+      theme_by <a href="http://hexo.io/" target="_blank">mango</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">归档</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于.</a>
+  
+</nav>
+    
+
+
+<script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

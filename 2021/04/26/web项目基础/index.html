@@ -15,7 +15,7 @@
 <meta property="og:description" content="JavaWeb基础XML基础概念 可扩展标记语言。 1、Extensible 标签都是自定义的. 2、Markup Language 标记语言    功能 存储数据 ​    1、配置文件 ​    2、在网络中传输    XML和html的区别 w3c 万维网联盟。浏览器的恶性竞争导致html没有唯一规范。XML要求严格的语法。XML现主用于配置文件。 ​    1、XML的标签都是自定义的。而">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-04-26T14:01:54.820Z">
-<meta property="article:modified_time" content="2021-05-25T14:55:16.457Z">
+<meta property="article:modified_time" content="2021-06-06T09:01:42.489Z">
 <meta property="article:author" content="wuyp">
 <meta name="twitter:card" content="summary">
   
@@ -373,6 +373,8 @@
 </li>
 </ul>
 </li>
+</ul>
+<h4 id="tomcat"><a href="#tomcat" class="headerlink" title="tomcat"></a>tomcat</h4><ul>
 <li><p>tomcat</p>
 <ul>
 <li><p>下载安装使用卸载 启动关闭配置</p>
@@ -420,11 +422,31 @@
 <li>简化部署：将项目打成一个war包。再将war包房知道webapps目录下。war包会自动解压缩。</li>
 </ul>
 </li>
-<li><p>部署项目</p>
+<li><p>配置conf / server.xml 文件</p>
+<p>在&lt; Host&gt; 标签体中配置</p>
+<p>&lt; Context docBase=”项目存放的路径” path=”虚拟访问目录” /&gt;</p>
+<p>缺点：一般不使用该配置 只能配置单一项目</p>
+</li>
+<li><p>在conf \ Catalina \ localhost创建任意名称的xml文件。在文件中编写</p>
+<p>&lt; Context docBase=”项目存放的路径” /&gt; </p>
+<p>虚拟目录 = xml文件的名称</p>
+<p>优势：热部署方式</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>静态项目 和 动态项目</p>
 <ul>
-<li>server.xml</li>
+<li>目录结构<ul>
+<li>Java静态资源</li>
+<li>Java动态项目的目录结构<ul>
+<li>项目根目录</li>
+<li>WEB-INF目录<ul>
+<li>web.xml ： web项目的核心配置文件</li>
+<li>classes目录：放字节码文件的目录</li>
+<li>lib 目录：依赖的jar包</li>
 </ul>
-<p>&lt; Context docBase=”项目路径” path=”项目访问路径” /&gt;</p>
 </li>
 </ul>
 </li>
@@ -432,15 +454,227 @@
 </li>
 </ul>
 </li>
+<li><p>tomcat集成到idea中。创建JavaEE项目 部署项目</p>
+</li>
 </ul>
+</li>
+</ul>
+<h2 id="servlet"><a href="#servlet" class="headerlink" title="servlet"></a>servlet</h2><h3 id="概念-1"><a href="#概念-1" class="headerlink" title="概念"></a>概念</h3><p>servlet applet 运行在服务器端的小程序</p>
+<p>说明：</p>
+<p>浏览器通过路径访问服务器[动态资源：逻辑java代码–java类「依赖于服务器才能运行==tomcat执行它|==需要遵守一定的规则『Servlet』才能被tomcat所识别」]</p>
+<ul>
+<li><p>概念</p>
+<ul>
+<li>servlet就是一个接口，定义了Java类被浏览器访问 ( tomcat识别 ) 的规则</li>
+<li>自定义一个类，实现servlet接口，复写方法。</li>
+</ul>
+</li>
+<li><p>快速入门步骤</p>
+<ul>
+<li>创建JavaEE项目</li>
+<li>定义一个类，实现servlet接口</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ServletDemo1</span> <span class="keyword">implements</span> <span class="title">Servlet</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
 
+<ul>
+<li>实现接口中的抽象方法</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 提供服务的方法</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(ServletRequest servletRequest, ServletResponse servletResponse)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;hello servlet&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>配置servlet<ul>
+<li>类定义之后，浏览器通过URL访问。URL+具体资源名称映射到类的访问</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 配置servlet --&gt;</span><br><span class="line">    &lt;servlet&gt;</span><br><span class="line">        &lt;servlet-name&gt;demo1&lt;&#x2F;servlet-name&gt;</span><br><span class="line">        &lt;servlet-class&gt;com.example.web.servlet.ServletDemo1&lt;&#x2F;servlet-class&gt;</span><br><span class="line">    &lt;&#x2F;servlet&gt;</span><br><span class="line">    &lt;!-- URL路径和类的映射 --&gt;</span><br><span class="line">    &lt;servlet-mapping&gt;</span><br><span class="line">        &lt;servlet-name&gt;demo1&lt;&#x2F;servlet-name&gt;</span><br><span class="line">        &lt;url-pattern&gt;&#x2F;demo&lt;&#x2F;url-pattern&gt;</span><br><span class="line">    &lt;&#x2F;servlet-mapping&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="执行原理"><a href="#执行原理" class="headerlink" title="执行原理"></a>执行原理</h3><ul>
+<li><p>原理</p>
+<p>URL路径 资源名称 –&gt; web.xml —&gt; tomcat将全类名对应的字节码文件加载进内存Class.forName()  ，创建对象，调用方法–service</p>
+<ul>
+<li>当服务器接收到客户端浏览器的请求后，会解析请求URL路径，获取访问的servlet的资源路径。</li>
+<li>查找web.xml文件，是否有对应的url-pattern 标签体内容</li>
+<li>如果有，找到对应的 servlet-class 对应的全类名</li>
+<li>tomcat会将字节码文件加载斤内存，并且创建其对象</li>
+<li>调用其方法</li>
+</ul>
+</li>
+</ul>
+<h3 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h3><ul>
+<li><p>servlet中的生命周期</p>
+<ul>
+<li><p>被创建：执行init方法，只执行一次</p>
+<ul>
+<li><p>servlet什么时候被创建</p>
+<ul>
+<li>默认情况下，第一次被访问时，servlet被创建</li>
+<li>可以配置执行servlet的创建时机 </li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>demo2<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>com.example.web.servlet.ServletDemo2<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 指定 servlet 的创建时机</span></span><br><span class="line"><span class="comment">            1、第一次被访问时创建</span></span><br><span class="line"><span class="comment">                load-on-startup 值为负数。默认值-1</span></span><br><span class="line"><span class="comment">            2、在服务器启动时创建</span></span><br><span class="line"><span class="comment">                load-on-startup 值为0或正整数 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">load-on-startup</span>&gt;</span>-1<span class="tag">&lt;/<span class="name">load-on-startup</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>Servlet 的init方法，只执行一次，说明一个servlet在内存中只存在一个对象。servlet是单例的。</p>
+<ul>
+<li>多个用户同时访问时，可能存在线程安全问题。<ul>
+<li>解决：尽量不要在servlet中定义成员变量。即使定义了成员变量，也不要修改值。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>提供服务：执行service方法，执行多次</p>
+<ul>
+<li>每次访问servlet时，service方法都会被调用一次。</li>
+</ul>
+</li>
+<li><p>被销毁：执行destroy方法，只执行一次【servlet被销毁之前执行！一般用于释放资源】</p>
+<ul>
+<li>servlet被销毁时执行。服务器关闭时，servlet被销毁。</li>
+<li>只有服务器正常关闭时，才会执行destroy方法。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">web-app</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://xmlns.jcp.org/xml/ns/javaee&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">version</span>=<span class="string">&quot;3.1&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 配置servlet --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>demo1<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>com.example.web.servlet.ServletDemo1<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- URL路径和类的映射 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>demo1<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/demo<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>demo2<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>com.example.web.servlet.ServletDemo2<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 指定 servlet 的创建时机</span></span><br><span class="line"><span class="comment">            1、第一次被访问时创建</span></span><br><span class="line"><span class="comment">                load-on-startup 值为负数。默认值-1</span></span><br><span class="line"><span class="comment">            2、在服务器启动时创建</span></span><br><span class="line"><span class="comment">                load-on-startup 值为0或正整数 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">load-on-startup</span>&gt;</span>-1<span class="tag">&lt;/<span class="name">load-on-startup</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- URL路径和类的映射 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>demo2<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/demo2<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">web-app</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="servlet注解配置"><a href="#servlet注解配置" class="headerlink" title="servlet注解配置"></a>servlet注解配置</h3><ul>
+<li>servlet3.0<ul>
+<li>支持注解配置。可以不需要web.xml</li>
+<li>步骤<ul>
+<li>创建JavaEE项目，选择servlet版本3.0以上。可以不创建web.xml</li>
+<li>定义一个类，实现servlet接口</li>
+<li>复写方法</li>
+<li>在类上使用@WebServlet注解进行配置</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.demo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.servlet.*;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.annotation.WebServlet;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="meta">@WebServlet(urlPatterns = &quot;/demo&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ServletDemo</span> <span class="keyword">implements</span> <span class="title">Servlet</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(ServletConfig servletConfig)</span> <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ServletConfig <span class="title">getServletConfig</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(ServletRequest servletRequest, ServletResponse servletResponse)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;....servlet 3.0......&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getServletInfo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>IDEA与tomcat的相关配置<ul>
+<li>idea会为每一个tomcat部署的项目单独建立一份配置文件<ul>
+<li>查看控制台的log输出：CATALINA_BASE</li>
+</ul>
+</li>
+<li>工作空间项目          和          tomcat部署的web项目<ul>
+<li>tomcat真正访问的是“tomcat部署的web项目”</li>
+<li>“tomcat部署的web项目”对应着“工作空间项目” 的web目录下的所有资源</li>
+<li>WEB_INF目录下的资源不能被浏览器直接访问</li>
+<li>断点调试</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>servlet体系结构</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Servlet</span> </span>&#123; <span class="comment">// 接口</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">GenericServlet</span> <span class="keyword">implements</span> <span class="title">Servlet</span>, <span class="title">ServletConfig</span>, <span class="title">Serializable</span> </span>&#123; <span class="comment">// 抽象类</span></span><br><span class="line">  <span class="comment">// 将servlet接口中的其他的方法做了默认空实现，只将service()方法做了抽象</span></span><br><span class="line">  	<span class="comment">// 将来定义servlet类时，可以集成GenericServlet，实现service()方法即可</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">HttpServlet</span> <span class="keyword">extends</span> <span class="title">GenericServlet</span> </span>&#123;</span><br><span class="line">  <span class="comment">// doGet</span></span><br><span class="line">  <span class="comment">// doPost</span></span><br><span class="line">  <span class="comment">// 对http协议的一种封装，简化操作</span></span><br><span class="line">  	<span class="comment">// 定义类继承HttpServlet， 复写 doGet doPost[表单提交]</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>service() 方法作用</p>
+<p>​    1、获取请求方式</p>
+<p>​        String method  =  req.getMetod();    //GET.   POST</p>
+<p>​    2、获取数据</p>
+<ul>
+<li>servlet配置<ul>
+<li>Urlparttern: servlet访问路径<ul>
+<li>一个servlet可以定义多个访问路径 ： @WebServlet({“/demo3”,”/demo4”})</li>
+</ul>
+</li>
+<li>路径定义规则<ul>
+<li>/xxx</li>
+<li>/xxxx/xxx <ul>
+<li>多层路径 目录结构 @WebServlet(“/demo/demo4”)</li>
+</ul>
+</li>
+<li>*.do   <ul>
+<li>@WebServlet(“/*.do”)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h2><h3 id="概念-2"><a href="#概念-2" class="headerlink" title="概念"></a>概念</h3><p>​    超文本传输协议</p>
+<p>​    传输协议：客户端和服务端通信时，发送数据的格式</p>
+<p>​    特点</p>
+<p>​            1、基于TCP(安全的 三次握手)/UDP的高级协议</p>
+<p>​            2、默认端口号 80</p>
+<p>​            3、基于请求/响应模型：一次请求对应一次响应</p>
+<p>​            4、无状态的：每次请求之间相互独立，不能交互数据</p>
+<p>​    历史版本</p>
+<p>​    1.0 每一次请求响应都会建立新的连接 对缓存的支持比较好</p>
+<p>​    1.1 复用连接</p>
+<h3 id="请求-响应消息数据格式"><a href="#请求-响应消息数据格式" class="headerlink" title="请求/响应消息数据格式"></a>请求/响应消息数据格式</h3><p>请求消息数据格式</p>
+<table>
+<thead>
+<tr>
+<th>请求行</th>
+<th>请求头</th>
+<th>请求头</th>
+<th>请求体(正文)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>请求方式   请求URL   请求协议/版本<br />GET            /xxx           HTTP/1.1</td>
+<td>请求头名称  请求值</td>
+<td>空行<br />用于分割POST请求的请求头和请求体的</td>
+<td>参数<br />封装POST请求消息的请求参数</td>
+</tr>
+</tbody></table>
+<ul>
+<li>请求方式<ul>
+<li>HTTP协议有7中请求方式 常用的两种 GET/POST<ul>
+<li>GET<ul>
+<li>请求参数在请求行中，在URL后</li>
+<li>请求的URL长度是有限制的</li>
+</ul>
+</li>
+<li>POST<ul>
+<li>请求参数在请求体中</li>
+<li>请求的URL长度没有限制的</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>常见的请求头：客户端浏览器告诉服务器一些信息<ul>
+<li>Urse-Agent：浏览器告诉服务器，访问使用的浏览器版本信息<ul>
+<li>可以在服务器端获取该头的信息，可以解决浏览器的兼容性问题</li>
+</ul>
+</li>
+<li>Referer：<ul>
+<li>告诉服务器，当前请求从哪里来<ul>
+<li>防盗链</li>
+<li>统计工作</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li></li>
+</ul>
+<h2 id="Request"><a href="#Request" class="headerlink" title="Request"></a>Request</h2>
         
       </div>
       
       <aside id="article-toc" role="navigation" class="fixed" >
     <div id="article-toc-inner">
         <strong class="sidebar-title">文章目录</strong>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JavaWeb%E5%9F%BA%E7%A1%80"><span class="toc-text">JavaWeb基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#XML"><span class="toc-text">XML</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80"><span class="toc-text">基础</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-text">概念</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%AD%E6%B3%95"><span class="toc-text">语法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="toc-text">基本语法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%A5%E9%97%A8%E6%A1%88%E4%BE%8B"><span class="toc-text">入门案例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%84%E6%88%90%E9%83%A8%E5%88%86"><span class="toc-text">组成部分</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E6%9E%90"><span class="toc-text">解析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#web%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-text">web服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#web%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6"><span class="toc-text">web服务器软件</span></a></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JavaWeb%E5%9F%BA%E7%A1%80"><span class="toc-text">JavaWeb基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#XML"><span class="toc-text">XML</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80"><span class="toc-text">基础</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-text">概念</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%AD%E6%B3%95"><span class="toc-text">语法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="toc-text">基本语法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%A5%E9%97%A8%E6%A1%88%E4%BE%8B"><span class="toc-text">入门案例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%84%E6%88%90%E9%83%A8%E5%88%86"><span class="toc-text">组成部分</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E6%9E%90"><span class="toc-text">解析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#web%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-text">web服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#web%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BD%AF%E4%BB%B6"><span class="toc-text">web服务器软件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#tomcat"><span class="toc-text">tomcat</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#servlet"><span class="toc-text">servlet</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5-1"><span class="toc-text">概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E5%8E%9F%E7%90%86"><span class="toc-text">执行原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-text">生命周期</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#servlet%E6%B3%A8%E8%A7%A3%E9%85%8D%E7%BD%AE"><span class="toc-text">servlet注解配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP%E5%8D%8F%E8%AE%AE"><span class="toc-text">HTTP协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5-2"><span class="toc-text">概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82-%E5%93%8D%E5%BA%94%E6%B6%88%E6%81%AF%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F"><span class="toc-text">请求&#x2F;响应消息数据格式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Request"><span class="toc-text">Request</span></a></li></ol></li></ol>
     </div>
 </aside>
     </div>
